@@ -1,0 +1,19 @@
+version: '3.4'
+
+services:
+  localstack:
+    image: localstack/localstack:0.12.10
+    container_name: localstack_mn_dev
+    ports:
+      - '4566:4566'
+    environment:
+      - DEFAULT_REGION=eu-central-1
+      - SERVICES=sqs,sns
+      - DEBUG=1
+      - DATA_DIR=/tmp/localstack/data
+       # localstack needs to know it's external host, for SQS to  return correct queue endpoints
+      - HOSTNAME_EXTERNAL=${LOCALSTACK_HOSTNAME_EXTERNAL:-localstack}
+    volumes:
+      - '$PWD/infrastructure/local:/docker-entrypoint-initaws.d'
+      - './.localstack:/tmp/localstack'
+      - '/var/run/docker.sock:/var/run/docker.sock'

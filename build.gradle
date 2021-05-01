@@ -1,0 +1,44 @@
+plugins {
+    id("com.github.johnrengelman.shadow") version "6.1.0"
+    id("io.micronaut.application") version "1.5.0"
+}
+
+version = "0.1"
+group = "io.tenera"
+
+repositories {
+    mavenCentral()
+}
+
+micronaut {
+    runtime("netty")
+    testRuntime("junit5")
+    processing {
+        incremental(true)
+        annotations("io.tenera.*")
+    }
+}
+
+dependencies {
+    // messaging
+    implementation("io.micronaut.jms:micronaut-jms-sqs")
+
+    implementation("io.awspring.cloud:spring-cloud-starter-aws-messaging:2.3.1")
+
+    implementation("io.micronaut:micronaut-http-client")
+    implementation("io.micronaut:micronaut-runtime")
+    implementation("javax.annotation:javax.annotation-api")
+    compileOnly group: 'org.graalvm.nativeimage', name: 'svm', version: '21.0.0.2'
+    implementation("io.micronaut:micronaut-validation")
+
+    runtimeOnly("ch.qos.logback:logback-classic")
+}
+
+
+application {
+    mainClass.set("io.tenera.Application")
+}
+java {
+    sourceCompatibility = JavaVersion.toVersion("11")
+    targetCompatibility = JavaVersion.toVersion("11")
+}
