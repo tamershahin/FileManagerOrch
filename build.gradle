@@ -42,3 +42,9 @@ java {
     sourceCompatibility = JavaVersion.toVersion("11")
     targetCompatibility = JavaVersion.toVersion("11")
 }
+
+nativeImage {
+    args("-H:IncludeResources=.*")
+    args("-H:DynamicProxyConfigurationFiles=../../dynamic-proxies.json")
+    args('-H:+ReportExceptionStackTraces')
+}

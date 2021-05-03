@@ -4,6 +4,8 @@ package io.tenera.service;
 import io.awspring.cloud.messaging.core.NotificationMessagingTemplate;
 import io.micronaut.context.event.ApplicationEventListener;
 import io.micronaut.context.event.StartupEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Singleton;
 import java.time.Instant;
@@ -18,11 +20,12 @@ public class SendMessage implements ApplicationEventListener<StartupEvent> {
     public SendMessage(NotificationMessagingTemplate notificationMessagingTemplate) {
         this.notificationMessagingTemplate = notificationMessagingTemplate;
     }
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
     public void onApplicationEvent(StartupEvent event) {
         UUID id = UUID.randomUUID();
-        System.out.println("Sending with id = " + id);
+        logger.info("Sending with id = " + id);
         notificationMessagingTemplate.convertAndSend("file-events.fifo",
                 new FileCreatedEvent(id, Instant.now(), "s3://some/url"),
                 Map.of("event", "FILE_CREATED")
